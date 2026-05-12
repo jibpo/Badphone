@@ -6,7 +6,7 @@ let currentDeleteKey = null;
 
 window.onload = loadGroups;
 
-// --- 1. ระบบจัดการหน้าจอ ---
+// --- 1. ระบบจัดการหน้าจอ (สลับหน้าไปมา) ---
 function switchPage(pageId, el) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -15,7 +15,7 @@ function switchPage(pageId, el) {
     if (el) el.classList.add('active');
 }
 
-// --- 2. ระบบจัดการกลุ่ม/ก๊วน (อยู่ครบเหมือนเดิม) ---
+// --- 2. ระบบจัดการกลุ่ม/ก๊วน (เหมือนเดิมทุกอย่าง) ---
 function saveGroup() {
     const name = document.getElementById('gName').value.trim();
     const list = document.getElementById('pList').value.trim();
@@ -43,7 +43,22 @@ function fillPlayerList(key) {
     document.getElementById('pList').value = g[key];
 }
 
-// --- 3. ระบบสุ่มคู่ ---
+function deleteGroup(key) {
+    currentDeleteKey = key;
+    const modal = document.getElementById('deleteModal');
+    document.getElementById('deleteTargetName').innerText = key;
+    if (modal) modal.style.display = 'flex';
+}
+
+function executeDelete() {
+    const g = JSON.parse(localStorage.getItem('bad_v7_groups') || '{}');
+    delete g[currentDeleteKey];
+    localStorage.setItem('bad_v7_groups', JSON.stringify(g));
+    loadGroups();
+    document.getElementById('deleteModal').style.display = 'none';
+}
+
+// --- 3. ระบบสุ่มคู่ (รักษาระบบเดิมไว้ครบ) ---
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -79,6 +94,8 @@ function next() {
     }
 }
 
+function prev() { if(idx > 0) { idx--; render(); } }
+
 function render() {
     const m = history[idx];
     document.getElementById('roundLabel').innerText = `MATCH ${m.r}`;
@@ -86,7 +103,7 @@ function render() {
     document.getElementById('p3').innerText = m.p[2]; document.getElementById('p4').innerText = m.p[3];
 }
 
-// --- 4. ระบบสกอร์บอร์ดและจุดที่มีปัญหา (แก้ไขแล้ว) ---
+// --- 4. ระบบสกอร์บอร์ด (แก้ไขจุดที่มีปัญหา) ---
 function openScore() { 
     const m = history[idx];
     if(m) {
@@ -110,13 +127,19 @@ function addPoint(t) {
     upScore(); 
 }
 
-// จุดสำคัญ: ฟังก์ชันที่ปุ่ม End Game เรียกใช้
+function removePoint(t) {
+    if (t === 1) { if (sc1 > 0) sc1--; } else { if (sc2 > 0) sc2--; }
+    checkWinner();
+    upScore();
+}
+
+// แก้ไขจุดที่ถาม: กด End Game แล้วต้องไปหน้าผู้ชนะทันที
 function setDeuceMode(active) {
     isDeuceActive = active;
     deuceDecided = true;
     document.getElementById('deuceChoiceModal').style.display = 'none';
     
-    // ถ้ากด End Game ให้สั่งเช็คผู้ชนะและเด้งหน้าถ้วยรางวัลทันที
+    // ถ้าเลือก End Game (active=false) ให้ตัดสินและโชว์หน้า Winner ทันที
     if (!active) {
         checkWinner();
     }
@@ -131,7 +154,7 @@ function checkWinner() {
             else if (sc2 === 30 || (sc2 >= 21 && sc2 - sc1 >= 2)) showWinner("BLUE TEAM", "#007AFF");
             else if (sc1 >= 20 && sc2 >= 20) status.innerText = (sc1 === sc2) ? "DEUCE" : "ADVANTAGE";
         } else {
-            // โหมด End Game: ใครถึง 21 ก่อนชนะทันที
+            // โหมด End Game
             if (sc1 >= 21) showWinner("RED TEAM", "#FF3B30");
             else if (sc2 >= 21) showWinner("BLUE TEAM", "#007AFF");
         }
@@ -147,11 +170,11 @@ function showWinner(name, color) {
     document.getElementById('winnerModal').style.display = "flex";
 }
 
-// ปุ่มกด "กลับหน้าหลัก" ในหน้าผู้ชนะ
+// ปุ่มกลับหน้าหลักในหน้า Winner
 function closeWinnerModal() {
     document.getElementById('winnerModal').style.display = "none";
     closeScore();
-    // บังคับเปลี่ยนหน้าไปที่หน้า pageMatch (หน้าสุ่มคู่) ทันที
+    // กลับหน้าสุ่มคู่ (ปุ่มที่ 2 ในเมนู)
     const navMatch = document.querySelectorAll('.nav-item')[1];
     switchPage('pageMatch', navMatch);
 }

@@ -70,26 +70,30 @@
     </a>
 </nav>
 
-<div id="scoreOverlay" style="display:none; position:fixed; inset:0; z-index:2000; flex-direction: row;">
-    <div class="close-score" onclick="closeScore()" style="width:60px; height:60px; font-size:35px;">✕</div>
-    
-    <div class="score-side red-side" style="position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-        <div id="pNameRed" style="position: absolute; top: 80px; font-weight: 800; font-size: 24px; text-align: center; width: 90%; text-transform: uppercase; z-index: 2; line-height: 1.2;">TEAM A</div>
-        <div id="s1" class="score-num" style="z-index: 1; font-size: 180px;">0</div>
+<div id="scoreOverlay" style="display:none; position:fixed; inset:0; z-index:3000; display:flex; touch-action:none;">
+    <div class="score-side red-side" style="flex:1; position:relative; overflow:hidden;">
+        <div onclick="addPoint(1)" style="position:absolute; top:0; width:100%; height:70%; z-index:1;"></div>
+        <div onclick="removePoint(1)" style="position:absolute; bottom:0; width:100%; height:30%; z-index:2; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.05); color:rgba(255,255,255,0.5); font-size:40px;">-</div>
         
-        <div onclick="removePoint(1)" style="position: absolute; left: 0; top: 0; width: 50%; height: 100%; z-index: 5;"></div>
-        <div onclick="addPoint(1)" style="position: absolute; right: 0; top: 0; width: 50%; height: 100%; z-index: 5;"></div>
+        <div style="position:relative; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; pointer-events:none;">
+            <div id="pNameRed" style="font-weight:800; font-size:24px;">RED TEAM</div>
+            <div id="s1" class="score-num" style="font-size:180px;">0</div>
+        </div>
     </div>
 
-    <div class="score-side blue-side" style="position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-        <div id="pNameBlue" style="position: absolute; top: 80px; font-weight: 800; font-size: 24px; text-align: center; width: 90%; text-transform: uppercase; z-index: 2; line-height: 1.2;">TEAM B</div>
-        <div id="s2" class="score-num" style="z-index: 1; font-size: 180px;">0</div>
-        
-        <div onclick="removePoint(2)" style="position: absolute; left: 0; top: 0; width: 50%; height: 100%; z-index: 5;"></div>
-        <div onclick="addPoint(2)" style="position: absolute; right: 0; top: 0; width: 50%; height: 100%; z-index: 5;"></div>
+    <div class="score-side blue-side" style="flex:1; position:relative; overflow:hidden;">
+        <div onclick="addPoint(2)" style="position:absolute; top:0; width:100%; height:70%; z-index:1;"></div>
+        <div onclick="removePoint(2)" style="position:absolute; bottom:0; width:100%; height:30%; z-index:2; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.05); color:rgba(255,255,255,0.5); font-size:40px;">-</div>
+
+        <div style="position:relative; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; pointer-events:none;">
+            <div id="pNameBlue" style="font-weight:800; font-size:24px;">BLUE TEAM</div>
+            <div id="s2" class="score-num" style="font-size:180px;">0</div>
+        </div>
     </div>
 
-    <div id="deuceStatus" style="position:absolute; top:140px; width:100%; text-align:center; color:white; font-size:45px; font-weight:800; z-index:2200; pointer-events: none; text-shadow: 3px 3px 6px rgba(0,0,0,0.6);"></div>
+    <button onclick="closeScore()" style="position:absolute; top:20px; right:20px; width:50px; height:50px; border-radius:50%; border:3px solid black; background:white; font-weight:800; z-index:100;">✕</button>
+    <div id="deuceStatus" style="position:absolute; bottom:40%; left:50%; transform:translateX(-50%); font-size:30px; font-weight:900; color:white; text-shadow:4px 4px 0px black; pointer-events:none; z-index:50;"></div>
+</div>
 
     <div id="deuceChoiceModal" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:white; border:5px solid black; padding:35px; border-radius:30px; box-shadow:12px 12px 0px black; z-index:3500; width:90%; max-width:380px; text-align:center;">
         <h2 style="margin:0 0 15px; font-weight:800; color:black; font-size:32px;">DEUCE! 🔥</h2>

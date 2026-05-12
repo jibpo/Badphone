@@ -227,3 +227,25 @@ input, textarea {
     text-shadow: 5px 5px 0px rgba(0,0,0,0.2);
 }
 
+#scoreOverlay {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+/* เมื่อเป็นแนวนอน ให้ปรับตัวเลขเล็กลงหน่อย */
+@media (orientation: landscape) {
+    .score-num {
+        font-size: 100px !important;
+    }
+    #pNameRed, #pNameBlue {
+        font-size: 18px !important;
+    }
+}
+
+.score-side {
+    -webkit-user-select: none;
+    user-select: none;
+}
