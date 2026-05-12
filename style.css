@@ -230,22 +230,27 @@ input, textarea {
 #scoreOverlay {
     height: 100vh;
     width: 100vw;
-    position: fixed;
-    top: 0;
-    left: 0;
-}
-
-/* เมื่อเป็นแนวนอน ให้ปรับตัวเลขเล็กลงหน่อย */
-@media (orientation: landscape) {
-    .score-num {
-        font-size: 100px !important;
-    }
-    #pNameRed, #pNameBlue {
-        font-size: 18px !important;
-    }
+    overflow: hidden;
+    touch-action: none; /* ป้องกันจอเลื่อนเวลาเล่น */
 }
 
 .score-side {
+    width: 100%;
     -webkit-user-select: none;
     user-select: none;
+}
+
+/* ปรับขนาดตัวเลขเมื่อเป็นแนวนอน (Landscape) */
+@media (orientation: landscape) {
+    .score-num {
+        font-size: 120px !important;
+    }
+    #pNameRed, #pNameBlue {
+        font-size: 20px !important;
+    }
+}
+
+@media (orientation: landscape) {
+    .score-num { font-size: 100px !important; }
+    #winnerModal { scale: 0.8; } /* ย่อ Pop-up ลงหน่อยถ้าเป็นแนวนอน */
 }

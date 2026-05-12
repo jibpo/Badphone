@@ -170,18 +170,75 @@ function showWinner(name, color) {
     document.getElementById('winnerModal').style.display = "flex";
 }
 
-// ปุ่มกลับหน้าหลักในหน้า Winner
+// ฟังก์ชันตัดสินทันทีเมื่อกด End Game
+function forceEndGame() {
+    document.getElementById('deuceChoiceModal').style.display = 'none';
+    if (sc1 > sc2) {
+        showWinner("RED TEAM", "#FF3B30");
+    } else {
+        showWinner("BLUE TEAM", "#007AFF");
+    }
+}
+
+// แก้ไขให้เด้งแค่ Pop-up
+function showWinner(name, color) {
+    const modal = document.getElementById('winnerModal');
+    const text = document.getElementById('winnerText');
+    text.innerText = name;
+    text.style.color = color; // เปลี่ยนสีชื่อทีมที่ชนะ
+    modal.style.display = "block";
+}
+
+// ปิดทุกอย่างแล้วกลับหน้าสุ่ม
 function closeWinnerModal() {
     document.getElementById('winnerModal').style.display = "none";
-    closeScore();
-    // กลับหน้าสุ่มคู่ (ปุ่มที่ 2 ในเมนู)
-    const navMatch = document.querySelectorAll('.nav-item')[1];
-    switchPage('pageMatch', navMatch);
+    document.getElementById('scoreOverlay').style.display = "none";
+    
+    // กลับหน้า Match Up (ปุ่มที่ 2)
+    const navItems = document.querySelectorAll('.nav-item');
+    switchPage('pageMatch', navItems[1]);
+}
+
+// แก้ไขฟังก์ชันตัดสินตามกติกาปกติ
+function checkWinner() {
+    if (deuceDecided) {
+        if (isDeuceActive) {
+            if (sc1 === 30 || (sc1 >= 21 && sc1 - sc2 >= 2)) showWinner("RED TEAM", "#FF3B30");
+            else if (sc2 === 30 || (sc2 >= 21 && sc2 - sc1 >= 2)) showWinner("BLUE TEAM", "#007AFF");
+        }
+    } else {
+        if (sc1 === 21) showWinner("RED TEAM", "#FF3B30");
+        else if (sc2 === 21) showWinner("BLUE TEAM", "#007AFF");
+    }
 }
 
 function upScore() { 
     document.getElementById('s1').innerText = sc1; 
     document.getElementById('s2').innerText = sc2; 
+    
+    // เพิ่มส่วนนี้เพื่อแสดงสถานะดิวส์
+    const status = document.getElementById('deuceStatus');
+    if (deuceDecided && isDeuceActive) {
+        if (sc1 === sc2 && sc1 >= 20) {
+            status.innerText = "DEUCE";
+        } else if (sc1 >= 20 && sc2 >= 20) {
+            // ถ้าแต้มไม่เท่ากันให้ขึ้น Advantage
+            status.innerText = "ADVANTAGE";
+        } else {
+            status.innerText = "";
+        }
+    } else {
+        status.innerText = ""; 
+    }
+}
+
+function forceEndGame() {
+    document.getElementById('deuceChoiceModal').style.display = 'none';
+    if (sc1 > sc2) {
+        showWinner("RED TEAM", "#FF3B30");
+    } else {
+        showWinner("BLUE TEAM", "#007AFF");
+    }
 }
 
 function updateHist() {
