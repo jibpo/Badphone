@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Badminton Pro - Neobrutalism</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-container">
+    <section id="pagePlayers" class="page active">
+        <header><p>Let's play</p><h1>Manage Crew</h1></header>
+        <div class="card card-gradient">
+            <div class="input-group">
+                <input type="text" id="gName" placeholder="ชื่อก๊วน...">
+                <button class="btn-add" onclick="saveGroup()">+</button>
+            </div>
+            <div id="tags" class="tag-container"></div>
+            <textarea id="pList" placeholder="ใส่ชื่อคนละบรรทัด..." rows="8"></textarea>
+            <button class="btn-black" onclick="startRandom()">Start Match 🚀</button>
+        </div>
+    </section>
+
+    <section id="pageMatch" class="page">
+        <header><p>Live Court</p><h1>Match Up</h1></header>
+        <div id="noMatch" class="card" style="text-align:center; color:#888;">ยังไม่มีการสุ่มคู่</div>
+        <div id="matchDisplay" style="display:none;">
+            <div class="card card-yellow">
+                <div class="match-header">
+                    <span id="roundLabel" style="font-weight:800; font-size:18px;">MATCH 1</span>
+                    <div class="status-dot"></div>
+                </div>
+                <div class="match-row">
+                    <div class="team-box">
+                        <span id="p1" class="name"></span>
+                        <span id="p2" class="name"></span>
+                    </div>
+                    <div class="vs-badge">VS</div>
+                    <div class="team-box">
+                        <span id="p3" class="name"></span>
+                        <span id="p4" class="name"></span>
+                    </div>
+                </div>
+                <div class="control-grid">
+                    <button class="btn-nav" onclick="prev()">ย้อนกลับ</button>
+                    <button class="btn-nav btn-next" onclick="next()">คู่ถัดไป ➔</button>
+                </div>
+                <button class="btn-score" onclick="openScore()">⚔️ Open Scoreboard</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="pageHistory" class="page">
+        <header><p>Records</p><h1>Stats</h1></header>
+        <div id="histList"></div>
+    </section>
+</div>
+
+<nav class="bottom-nav">
+    <a href="#" class="nav-item active" onclick="switchPage('pagePlayers', this)">
+        <span class="nav-icon">👥</span><span class="nav-text">CREW</span>
+    </a>
+    <a href="#" class="nav-item" onclick="switchPage('pageMatch', this)">
+        <span class="nav-icon">🏸</span><span class="nav-text">MATCH</span>
+    </a>
+    <a href="#" class="nav-item" onclick="switchPage('pageHistory', this)">
+        <span class="nav-icon">📊</span><span class="nav-text">STATS</span>
+    </a>
+</nav>
+
+<div id="scoreOverlay" style="display:none; position:fixed; inset:0; z-index:2000; flex-direction: row;">
+    <div class="close-score" onclick="closeScore()" style="width:60px; height:60px; font-size:35px;">✕</div>
+    
+    <div class="score-side red-side" style="position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div id="pNameRed" style="position: absolute; top: 80px; font-weight: 800; font-size: 24px; text-align: center; width: 90%; text-transform: uppercase; z-index: 2; line-height: 1.2;">TEAM A</div>
+        <div id="s1" class="score-num" style="z-index: 1; font-size: 180px;">0</div>
+        
+        <div onclick="removePoint(1)" style="position: absolute; left: 0; top: 0; width: 50%; height: 100%; z-index: 5;"></div>
+        <div onclick="addPoint(1)" style="position: absolute; right: 0; top: 0; width: 50%; height: 100%; z-index: 5;"></div>
+    </div>
+
+    <div class="score-side blue-side" style="position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div id="pNameBlue" style="position: absolute; top: 80px; font-weight: 800; font-size: 24px; text-align: center; width: 90%; text-transform: uppercase; z-index: 2; line-height: 1.2;">TEAM B</div>
+        <div id="s2" class="score-num" style="z-index: 1; font-size: 180px;">0</div>
+        
+        <div onclick="removePoint(2)" style="position: absolute; left: 0; top: 0; width: 50%; height: 100%; z-index: 5;"></div>
+        <div onclick="addPoint(2)" style="position: absolute; right: 0; top: 0; width: 50%; height: 100%; z-index: 5;"></div>
+    </div>
+
+    <div id="deuceStatus" style="position:absolute; top:140px; width:100%; text-align:center; color:white; font-size:45px; font-weight:800; z-index:2200; pointer-events: none; text-shadow: 3px 3px 6px rgba(0,0,0,0.6);"></div>
+
+    <div id="deuceChoiceModal" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:white; border:5px solid black; padding:35px; border-radius:30px; box-shadow:12px 12px 0px black; z-index:3500; width:90%; max-width:380px; text-align:center;">
+        <h2 style="margin:0 0 15px; font-weight:800; color:black; font-size:32px;">DEUCE! 🔥</h2>
+        <p style="margin-bottom:25px; color:black; font-size:20px; font-weight:600;">เลือกรูปแบบการจบเกม:</p>
+        <button class="btn-black" onclick="setDeuceMode(true)" style="margin-bottom:15px; font-size:22px; padding:15px;">Deuce</button>
+        <button class="btn-black" onclick="setDeuceMode(false)" style="background:#EEE; color:black; border:3px solid black; font-size:22px; padding:15px;">End Game</button>
+    </div>
+</div>
+
+<div id="winnerModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:4000; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(8px);">
+    <div id="winnerCard" style="width:100%; max-width:400px; padding:50px 20px; border-radius:40px; text-align:center; border:6px solid black; box-shadow:15px 15px 0px black; background: white;">
+        <div style="font-size: 80px; margin-bottom: 15px;">🏆</div>
+        <h2 style="margin:0; font-weight:800; font-size:35px;">WINNER!</h2>
+        <p id="winnerText" style="font-size:30px; font-weight:800; margin:15px 0 35px; color:white; text-shadow: 1px 1px 2px #000;"></p>
+        <button class="btn-black" onclick="closeWinnerModal()" style="font-size:22px; padding:15px 30px;">กลับหน้าหลัก</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+
+</body>
+</html>
