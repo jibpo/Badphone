@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Badminton Pro - Neobrutalism</title>
+    <title>Badminton Pro - Complete</title>
     <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -28,26 +28,17 @@
         <div id="noMatch" class="card" style="text-align:center; color:#888;">ยังไม่มีการสุ่มคู่</div>
         <div id="matchDisplay" style="display:none;">
             <div class="card card-yellow">
-                <div class="match-header">
-                    <span id="roundLabel" style="font-weight:800; font-size:18px;">MATCH 1</span>
-                    <div class="status-dot"></div>
-                </div>
+                <div style="font-weight:800; font-size:22px; margin-bottom:15px;" id="roundLabel">MATCH 1</div>
                 <div class="match-row">
-                    <div class="team-box">
-                        <span id="p1" class="name"></span>
-                        <span id="p2" class="name"></span>
-                    </div>
+                    <div class="team-box"><span id="p1" class="name"></span><span id="p2" class="name"></span></div>
                     <div class="vs-badge">VS</div>
-                    <div class="team-box">
-                        <span id="p3" class="name"></span>
-                        <span id="p4" class="name"></span>
-                    </div>
+                    <div class="team-box"><span id="p3" class="name"></span><span id="p4" class="name"></span></div>
                 </div>
                 <div class="control-grid">
                     <button class="btn-nav" onclick="prev()">ย้อนกลับ</button>
                     <button class="btn-nav btn-next" onclick="next()">คู่ถัดไป ➔</button>
                 </div>
-                <button class="btn-score" onclick="openScore()">⚔️ Open Scoreboard</button>
+                <button class="btn-black" onclick="openScore()" style="font-size:14px !important; padding:12px; margin-top:10px;">⚔️ Open Scoreboard</button>
             </div>
         </div>
     </section>
@@ -70,39 +61,47 @@
     </a>
 </nav>
 
-<div id="scoreOverlay" style="display:none; position:fixed; inset:0; z-index:2000; flex-direction: column; touch-action: none;">
-    <div class="score-side red-side" style="flex:1; position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-        <div onclick="removePoint(1)" style="position:absolute; left:0; top:0; width:50%; height:100%; z-index:10;"></div>
-        <div onclick="addPoint(1)" style="position:absolute; right:0; top:0; width:50%; height:100%; z-index:10;"></div>
-        <div id="pNameRed" style="font-weight:800; font-size:20px; margin-bottom:5px;">TEAM A</div>
-        <div id="s1" class="score-num" style="font-size:150px; font-weight:900;">0</div>
+<div id="scoreOverlay">
+    <div class="score-side red-side">
+        <div onclick="removePoint(1)" class="tap-area-minus"></div>
+        <div onclick="addPoint(1)" class="tap-area-plus"></div>
+        <div id="pNameRed" class="team-label">TEAM A</div>
+        <div id="s1" class="score-num">0</div>
+    </div>
+    <div class="score-side blue-side">
+        <div onclick="removePoint(2)" class="tap-area-minus"></div>
+        <div onclick="addPoint(2)" class="tap-area-plus"></div>
+        <div id="pNameBlue" class="team-label">TEAM B</div>
+        <div id="s2" class="score-num">0</div>
+    </div>
+    <div id="deuceStatus"></div>
+    <div onclick="closeScore()" class="btn-close-score">✕</div>
+
+    <div id="deuceChoiceModal" class="modal">
+        <h2 style="margin:0 0 10px;">DEUCE! 🔥</h2>
+        <button class="btn-black" onclick="setDeuceMode(true)" style="margin-bottom:8px;">เล่นดิวส์ต่อ</button>
+        <button class="btn-black" onclick="forceEndGame()" style="background:#EEE; color:black; border:2px solid black;">จบเกมทันที</button>
     </div>
 
-    <div class="score-side blue-side" style="flex:1; position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center; border-top:4px solid rgba(0,0,0,0.1);">
-        <div onclick="removePoint(2)" style="position:absolute; left:0; top:0; width:50%; height:100%; z-index:10;"></div>
-        <div onclick="addPoint(2)" style="position:absolute; right:0; top:0; width:50%; height:100%; z-index:10;"></div>
-        <div id="pNameBlue" style="font-weight:800; font-size:20px; margin-bottom:5px;">TEAM B</div>
-        <div id="s2" class="score-num" style="font-size:150px; font-weight:900;">0</div>
+    <div id="winnerModal" class="modal">
+        <div style="font-size:40px;">🏆</div>
+        <h2 id="winnerText" style="margin:5px 0;">TEAM A</h2>
+        <p style="margin-bottom:15px; font-weight:600; color:#666;">ผู้ชนะ!</p>
+        <button class="btn-black" onclick="closeWinnerModal()">ตกลง</button>
     </div>
+</div>
 
-    <div id="deuceStatus" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); pointer-events:none; z-index:2500; color:white; font-size:42px; font-weight:900; text-align:center; text-shadow: 4px 4px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000, 1px 1px 0px #000; letter-spacing: 2px;"></div>
-
-    <div id="deuceChoiceModal" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:white; border:4px solid black; padding:25px; border-radius:25px; box-shadow:8px 8px 0px black; z-index:3000; width:80%; max-width:320px; text-align:center;">
-        <h2 style="margin:0 0 10px; font-size:24px;">DEUCE! 🔥</h2>
-        <button class="btn-black" onclick="setDeuceMode(true)" style="margin-bottom:10px; width:100%;">Deuce (ต่อ)</button>
-        <button class="btn-black" onclick="forceEndGame()" style="background:#EEE; color:black; border:2px solid black; width:100%;">End Game (พอแค่นี้)</button>
-    </div>
-
-    <div id="winnerModal" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:white; border:5px solid black; padding:30px; border-radius:30px; box-shadow:10px 10px 0px black; z-index:4000; width:85%; max-width:340px; text-align:center;">
-        <div style="font-size:50px; margin-bottom:10px;">🏆</div>
-        <h1 id="winnerText" style="margin:0; font-size:28px; font-weight:800;">RED TEAM</h1>
-        <p style="margin:10px 0 20px; font-weight:600;">IS THE WINNER!</p>
-        <button class="btn-black" onclick="closeWinnerModal()" style="width:100%; background:#D7FF5A; color:black;">กลับหน้าสุ่มคู่ 🚀</button>
+<div id="confirmModal">
+    <div class="card" style="width:100%; max-width:300px; text-align:center;">
+        <h2 style="margin:0 0 10px;">ลบก๊วน?</h2>
+        <p id="confirmMsg" style="margin-bottom:20px; font-size:14px;"></p>
+        <div style="display:flex; gap:10px;">
+            <button class="btn-nav" onclick="closeConfirm()" style="flex:1;">ยกเลิก</button>
+            <button class="btn-nav btn-next" id="btnConfirmDelete" style="flex:1; background:#FF3B30; color:white;">ลบ</button>
+        </div>
     </div>
 </div>
 
 <script src="script.js"></script>
-</body>
-
 </body>
 </html>

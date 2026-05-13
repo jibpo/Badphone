@@ -1,256 +1,75 @@
-* { 
-    font-family: 'Mali', sans-serif !important; 
-}
 :root {
     --bg: #FFFFFF;
-    --primary: #D7FF5A; /* เหลืองนีออน */
-    --accent: #FFB5FF;  /* ชมพูพาสเทล */
+    --primary: #D7FF5A;
+    --accent: #FFB5FF;
     --dark: #000000;
-    --white: #FFFFFF;
-    --border-thick: 3px solid #000;
-    --brutal-shadow: 6px 6px 0px #000;
+    --border: 2px solid #000;
+    --shadow: 4px 4px 0px #000;
 }
 
-/* แก้ไขจุดนี้: เพิ่ม font-family และใช้ !important เพื่อให้ทุกอย่างใช้ฟอนต์ Mali */
-* { 
-    box-sizing: border-box; 
-    -webkit-tap-highlight-color: transparent; 
-    outline: none; 
-    font-family: 'Mali', sans-serif !important; 
-}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Mali', sans-serif !important; }
 
-body {
-    background-color: var(--bg);
-    margin: 0; padding: 0; color: var(--dark);
-    overflow-x: hidden;
-}
+body { background: var(--bg); margin: 0; overflow-x: hidden; min-height: 100vh; }
 
-.app-container {
-    padding: env(safe-area-inset-top) 20px 120px;
-    max-width: 500px;
-    margin: 0 auto;
-}
+.app-container { padding: 20px 15px 100px; max-width: 480px; margin: 0 auto; }
 
 .page { display: none; }
-.page.active { display: block; animation: fadeIn 0.3s ease; }
+.page.active { display: block; animation: fadeIn 0.3s; }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
-@keyframes fadeIn { 
-    from { opacity: 0; transform: translateY(10px); } 
-    to { opacity: 1; transform: translateY(0); } 
-}
+header h1 { font-size: 26px; margin: 0; font-weight: 800; }
+header p { color: #888; font-weight: 700; font-size: 11px; margin: 0; }
 
-header { padding: 20px 0; }
-header h1 { font-size: 36px; margin: 0; font-weight: 800; letter-spacing: -1px; }
-header p { color: #888; font-weight: 700; margin: 0; text-transform: uppercase; font-size: 12px; }
-
-.card {
-    background: var(--white);
-    border: var(--border-thick);
-    border-radius: 30px;
-    padding: 25px;
-    margin-bottom: 25px;
-    box-shadow: var(--brutal-shadow);
-    position: relative;
-}
-
-.card-gradient { background: linear-gradient(180deg, var(--accent) 0%, var(--white) 100%); }
+.card { background: #fff; border: var(--border); border-radius: 20px; padding: 20px; margin-top: 15px; box-shadow: var(--shadow); }
+.card-gradient { background: linear-gradient(180deg, var(--accent) 0%, #fff 100%); }
 .card-yellow { background: var(--primary); }
 
-.input-group { display: flex; gap: 10px; margin-bottom: 15px; }
+.input-group { display: flex; gap: 8px; margin-bottom: 12px; }
+input, textarea { width: 100%; border: var(--border); border-radius: 12px; padding: 12px; font-weight: 600; }
 
-input, textarea {
-    width: 100%; border: var(--border-thick); background: var(--white);
-    border-radius: 18px; padding: 15px; font-weight: 600;
-}
+.btn-add { background: var(--dark); color: #fff; border: none; border-radius: 12px; width: 48px; height: 48px; font-size: 24px; }
 
-/* ปุ่ม Start Match จะใช้ฟอนต์ Mali ตามกฎของ * ด้านบนแล้ว */
-.btn-black {
-    background: var(--dark); color: var(--white); border: none;
-    border-radius: 20px; padding: 20px; width: 100%;
-    font-size: 18px; font-weight: 800; cursor: pointer; transition: 0.1s;
-}
+.tag-container { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.tag { background: var(--dark); color: #fff; padding: 6px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; position: relative; }
+.btn-del-tag { position: absolute; top: -8px; right: -8px; background: #FF3B30; color: #fff; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; border: 1px solid #fff; }
+
+.btn-black { background: var(--dark); color: #fff; border: none; border-radius: 15px; padding: 15px; width: 100%; font-size: 16px; font-weight: 800; }
 .btn-black:active { transform: translate(2px, 2px); }
 
-.btn-add {
-    background: var(--dark); color: var(--white); border: none;
-    border-radius: 15px; width: 55px; font-size: 24px; cursor: pointer;
-}
+/* Match */
+.match-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; margin: 15px 0; }
+.team-box { background: #fff; border: 2px solid #000; border-radius: 15px; padding: 12px; text-align: center; }
+.name { display: block; font-weight: 700; font-size: 14px; }
+.vs-badge { background: #000; color: var(--primary); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; }
+.control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn-nav { background: #fff; border: 2px solid #000; border-radius: 12px; padding: 10px; font-weight: 700; }
+.btn-next { background: #000; color: #fff; }
 
-/* Tag Styles */
-.tag-container { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
-.tag {
-    background: var(--dark); color: white; padding: 10px 22px;
-    border-radius: 15px; font-size: 14px; font-weight: 700;
-    cursor: pointer; position: relative; border: 2px solid var(--dark);
-}
-.btn-del-tag {
-    position: absolute; top: -10px; right: -10px;
-    background: #FF8A8A; color: white; width: 24px; height: 24px;
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-size: 12px; border: 2px solid var(--white); cursor: pointer;
-    box-shadow: 2px 2px 0px var(--dark);
-}
-
-/* Match UI */
-.match-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.status-dot { width: 12px; height: 12px; background: var(--dark); border-radius: 50%; }
-.match-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; margin: 25px 0; }
-.team-box { background: var(--white); border: 2px solid var(--dark); border-radius: 20px; padding: 18px; text-align: center; }
-.name { display: block; font-weight: 700; font-size: 16px; }
-.vs-badge { background: var(--dark); color: var(--primary); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; }
-
-.control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-.btn-nav { background: var(--white); border: 2px solid var(--dark); border-radius: 15px; padding: 14px; font-weight: 700; cursor: pointer; }
-.btn-next { background: var(--dark); color: var(--white); }
-
-.btn-score {
-    background: transparent; border: 2px solid var(--dark); border-radius: 15px; 
-    padding: 15px; width: 100%; font-weight: 800; cursor: pointer;
-}
-
-/* Bottom Nav */
-.bottom-nav {
-    position: fixed; bottom: 25px; left: 20px; right: 20px;
-    background: var(--dark); border-radius: 25px; height: 75px;
-    display: flex; align-items: center; justify-content: space-around;
-    z-index: 1000; max-width: 460px; margin: 0 auto;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
+/* Nav */
+.bottom-nav { position: fixed; bottom: 15px; left: 15px; right: 15px; background: var(--dark); border-radius: 20px; height: 65px; display: flex; align-items: center; justify-content: space-around; max-width: 450px; margin: 0 auto; z-index: 1000; }
 .nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; color: #666; }
 .nav-item.active { color: var(--primary); }
-.nav-icon { font-size: 22px; }
-.nav-text { font-size: 10px; font-weight: 800; margin-top: 4px; }
-
-/* Custom Modal */
-.modal-overlay {
-    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8);
-    display: none; align-items: center; justify-content: center;
-    z-index: 3000; padding: 20px; backdrop-filter: blur(4px);
-}
-.modal-card {
-    background: var(--white); border: 4px solid var(--dark); border-radius: 35px;
-    padding: 35px; max-width: 400px; width: 100%; text-align: center;
-    box-shadow: 10px 10px 0px var(--dark);
-}
-.modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
-.btn-modal-cancel { background: #EEE; border: 2px solid var(--dark); padding: 16px; border-radius: 18px; font-weight: 800; cursor: pointer; }
-.btn-modal-confirm { background: #FF8A8A; color: white; border: 2px solid var(--dark); padding: 16px; border-radius: 18px; font-weight: 800; cursor: pointer; }
+.nav-icon { font-size: 20px; }
+.nav-text { font-size: 10px; font-weight: 700; }
 
 /* Scoreboard */
-#scoreOverlay { 
-    position: fixed; 
-    inset: 0; 
-    z-index: 2000; 
-    display: none; 
-    flex-direction: row; /* บังคับแบ่งซ้ายขวา */
-}
-
-.score-side { 
-    flex: 1; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    color: white; 
-}
-.red-side { background: #FF3B30; }
+#scoreOverlay { position: fixed; inset: 0; z-index: 2000; display: none; flex-direction: column; background: #000; }
+.score-side { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; }
+.red-side { background: #FF3B30; border-bottom: 1px solid rgba(255,255,255,0.1); }
 .blue-side { background: #007AFF; }
-.score-num { font-size: 150px; font-weight: 900; }
-.close-score { position: absolute; top: 40px; right: 30px; font-size: 30px; color: white; z-index: 2100; font-weight: 800; background: rgba(0,0,0,0.2); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+.score-num { font-size: 110px; font-weight: 900; }
+.team-label { font-size: 14px; font-weight: 700; opacity: 0.8; margin-bottom: 5px; }
 
-/* History Styles */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 30px;
-}
+.tap-area-minus { position: absolute; left: 0; top: 0; width: 40%; height: 100%; z-index: 10; }
+.tap-area-plus { position: absolute; right: 0; top: 0; width: 60%; height: 100%; z-index: 10; }
+.btn-close-score { position: absolute; top: 15px; right: 15px; color: #fff; font-size: 24px; z-index: 4000; }
 
-.stat-card {
-    background: var(--white);
-    border: 2px solid var(--dark);
-    border-radius: 20px;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 4px 4px 0px var(--dark);
-}
+#deuceStatus { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2500; color: #fff; font-size: 32px; font-weight: 900; text-shadow: 3px 3px 0px #000; pointer-events: none; }
+.modal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; border: 3px solid #000; border-radius: 20px; padding: 20px; width: 85%; max-width: 300px; text-align: center; box-shadow: 6px 6px 0px #000; z-index: 3000; display: none; }
 
-.stat-name { font-weight: 700; font-size: 14px; }
-.stat-count { 
-    background: var(--primary); 
-    color: var(--dark); 
-    padding: 4px 10px; 
-    border-radius: 10px; 
-    font-weight: 800; 
-    border: 1px solid var(--dark);
-}
+/* Stats */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.stat-card { background: #fff; border: 2px solid #000; border-radius: 12px; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+.stat-count { background: var(--primary); padding: 2px 8px; border-radius: 8px; font-weight: 800; font-size: 12px; }
 
-.history-item {
-    border-left: 8px solid var(--accent);
-    margin-bottom: 15px;
-    padding: 15px;
-}
-
-.history-round {
-    font-size: 12px;
-    font-weight: 800;
-    text-transform: uppercase;
-    color: #888;
-    margin-bottom: 5px;
-}
-
-/* ปรับขนาดตัวอักษรในส่วน Match Up */
-#roundLabel {
-    font-size: 28px !important;
-    margin-bottom: 20px !important;
-}
-
-.match-card .player-name {
-    font-size: 26px !important; /* ชื่อนักกีฬาตอนสุ่มคู่ */
-    font-weight: 800;
-}
-
-.btn-black {
-    font-size: 20px !important; /* ปุ่มกดทั่วไป */
-    padding: 15px 20px !important;
-}
-
-.nav-text {
-    font-size: 14px; /* เมนูด้านล่าง */
-    font-weight: 700;
-}
-
-/* ตัวเลขคะแนนหน้าสกอร์บอร์ด */
-.score-num {
-    font-size: 180px !important;
-    text-shadow: 5px 5px 0px rgba(0,0,0,0.2);
-}
-
-#scoreOverlay {
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-    touch-action: none; /* ป้องกันจอเลื่อนเวลาเล่น */
-}
-
-.score-side {
-    width: 100%;
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-/* ปรับขนาดตัวเลขเมื่อเป็นแนวนอน (Landscape) */
-@media (orientation: landscape) {
-    .score-num {
-        font-size: 120px !important;
-    }
-    #pNameRed, #pNameBlue {
-        font-size: 20px !important;
-    }
-}
-
-@media (orientation: landscape) {
-    .score-num { font-size: 100px !important; }
-    #winnerModal { scale: 0.8; } /* ย่อ Pop-up ลงหน่อยถ้าเป็นแนวนอน */
-}
+#confirmModal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
