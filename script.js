@@ -30,15 +30,28 @@ function loadGroups() {
     const tagsDiv = document.getElementById('tags');
     if (!tagsDiv) return;
     tagsDiv.innerHTML = Object.keys(g).map(k => `
-        <div class="tag" onclick="fillPlayerList('${k}')">${k}
+        <div class="tag" onclick="fillPlayerList('${k}', this)">
+            ${k}
             <div class="btn-del-tag" onclick="event.stopPropagation(); deleteGroup('${k}')">✕</div>
         </div>
     `).join('');
 }
 
-function fillPlayerList(key) {
+function fillPlayerList(key, el) {
     const g = JSON.parse(localStorage.getItem('bad_v7_groups') || '{}');
-    document.getElementById('pList').value = g[key];
+    const pList = document.getElementById('pList');
+    
+    // เปลี่ยนรายชื่อทันที ไม่ต้องมีหน่วงเวลา
+    pList.value = g[key];
+
+    // จัดการ Class Active ของ Tag
+    document.querySelectorAll('.tag').forEach(t => {
+        t.classList.remove('active-tag');
+    });
+    
+    if (el) {
+        el.classList.add('active-tag');
+    }
 }
 
 function deleteGroup(key) {
@@ -140,16 +153,47 @@ function openScore() {
 function closeScore() { document.getElementById('scoreOverlay').style.display = 'none'; }
 
 function addPoint(t) {
+    // โค้ดใหม่: เพิ่มสั่น
+    if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(10);
+    
     if(t === 1) sc1++; else sc2++;
+
+    // --- ฟังก์ชันดิวส์เดิม: ยังอยู่ครบ ---
     if(sc1 === 20 && sc2 === 20 && !deuceDecided) {
         document.getElementById('deuceChoiceModal').style.display = 'block';
     }
-    checkWinner();
-    upScore();
+    
+    checkWinner(); // เช็คผู้ชนะตามเงื่อนไขดิวส์
+    upScore();     // อัปเดตจอ (พร้อมตัวเลขเด้งใหม่)
+}
+
+function checkWinner() {
+    // --- ตรรกะตัดสินเดิม: ยังอยู่ครบ ---
+    if (deuceDecided && isDeuceActive) {
+        // โหมดดิวส์: ชนะห่าง 2 หรือถึง 30
+        if (sc1 === 30 || (sc1 >= 21 && sc1 - sc2 >= 2)) showWinner("RED TEAM");
+        else if (sc2 === 30 || (sc2 >= 21 && sc2 - sc1 >= 2)) showWinner("BLUE TEAM");
+    } else {
+        // โหมดปกติ/ไม่ดิวส์: ใครถึง 21 ก่อนชนะ
+        if (sc1 === 21) showWinner("RED TEAM");
+        else if (sc2 === 21) showWinner("BLUE TEAM");
+    }
 }
 
 function removePoint(t) {
-    if(t === 1) { if(sc1 > 0) sc1--; } else { if(sc2 > 0) sc2--; }
+    // 1. เพิ่มสั่นเบาๆ ตอนกดลบ (Feedback)
+    if (window.navigator && window.navigator.vibrate) {
+        window.navigator.vibrate(10);
+    }
+
+    // 2. ตรรกะการลดแต้มเดิม (ยังอยู่ครบ)
+    if(t === 1) { 
+        if(sc1 > 0) sc1--; 
+    } else { 
+        if(sc2 > 0) sc2--; 
+    }
+
+    // 3. เช็คผู้ชนะและอัปเดตจอ (ซึ่งจะเรียกใช้ตัวเลขเด้งที่เราแก้ไว้ใน upScore)
     checkWinner();
     upScore();
 }
@@ -189,9 +233,39 @@ function closeWinnerModal() {
     closeScore();
 }
 
+// เพิ่มตัวแปรไว้เก็บว่าใครได้แต้มล่าสุด (ไว้ที่บนสุดของไฟล์ หรือนอกฟังก์ชัน)
+let lastScorer = 0; // 0 = ไม่มี, 1 = แดง, 2 = น้ำเงิน
+
 function upScore() {
-    document.getElementById('s1').innerText = sc1;
-    document.getElementById('s2').innerText = sc2;
+    const s1El = document.getElementById('s1');
+    const s2El = document.getElementById('s2');
+    const shut1 = document.getElementById('shuttle1');
+    const shut2 = document.getElementById('shuttle2');
+
+    // เล่น Animation และเก็บสถิติฝั่งที่ได้แต้มล่าสุด
+    if (parseInt(s1El.innerText) < sc1) {
+        s1El.classList.remove('bounce');
+        void s1El.offsetWidth;
+        s1El.classList.add('bounce');
+        lastScorer = 1; 
+    }
+    if (parseInt(s2El.innerText) < sc2) {
+        s2El.classList.remove('bounce');
+        void s2El.offsetWidth;
+        s2El.classList.add('bounce');
+        lastScorer = 2;
+    }
+
+    // แสดงลูกแบดสีขาวเฉพาะฝั่งที่ส่งลูก (ได้แต้มล่าสุด)
+    if (shut1 && shut2) {
+        shut1.style.visibility = (lastScorer === 1) ? 'visible' : 'hidden';
+        shut2.style.visibility = (lastScorer === 2) ? 'visible' : 'hidden';
+    }
+
+    s1El.innerText = sc1;
+    s2El.innerText = sc2;
+    
+    // ตรรกะ Deuce เดิม (คงไว้)
     const st = document.getElementById('deuceStatus');
     if(deuceDecided && isDeuceActive && sc1 >= 20 && sc2 >= 20) {
         st.innerText = (sc1 === sc2) ? "DEUCE" : "ADVANTAGE";

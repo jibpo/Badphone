@@ -1,3 +1,30 @@
+/* ใส่เพิ่มไว้บนสุดของไฟล์ style.css */
+body {
+    overscroll-behavior-y: contain; /* ป้องกันการลากลงเพื่อรีเฟรช */
+    -webkit-tap-highlight-color: transparent; /* ลบสีฟ้าเวลาแตะปุ่มบนมือถือ */
+}
+
+* {
+    -webkit-user-select: none; /* ป้องกันการคลุมดำเลือกตัวอักษร */
+    user-select: none;
+    -webkit-touch-callout: none; /* ป้องกันเมนูเด้งเวลาค้างที่รูปหรือลิงก์ */
+}
+
+input, textarea {
+    -webkit-user-select: text; /* อนุญาตให้พิมพ์ในช่องเหล่านี้ได้ */
+    user-select: text;
+}
+
+/* ใส่เพิ่มในส่วน Scoreboard */
+@keyframes scoreBounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); color: var(--primary); }
+    100% { transform: scale(1); }
+}
+.bounce {
+    animation: scoreBounce 0.3s ease-out;
+}
+
 :root {
     --bg: #FFFFFF;
     --primary: #D7FF5A;
@@ -58,7 +85,7 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
 .red-side { background: #FF3B30; border-bottom: 1px solid rgba(255,255,255,0.1); }
 .blue-side { background: #007AFF; }
 .score-num { font-size: 110px; font-weight: 900; }
-.team-label { font-size: 14px; font-weight: 700; opacity: 0.8; margin-bottom: 5px; }
+.team-label { font-size: 22px; font-weight: 800; opacity: 0.8; margin-bottom: 10px; text-transform: uppercase; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
 
 .tap-area-minus { position: absolute; left: 0; top: 0; width: 40%; height: 100%; z-index: 10; }
 .tap-area-plus { position: absolute; right: 0; top: 0; width: 60%; height: 100%; z-index: 10; }
@@ -73,3 +100,89 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
 .stat-count { background: var(--primary); padding: 2px 8px; border-radius: 8px; font-weight: 800; font-size: 12px; }
 
 #confirmModal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+
+.shuttle-white {
+    font-size: 50px; /* ปรับขนาดตามชอบ */
+    visibility: hidden;
+    line-height: 1;
+    /* เทคนิคย้อมสี Emoji ให้เป็นสีขาวสด */
+    filter: brightness(0) invert(1); 
+    -webkit-filter: brightness(0) invert(1);
+    
+    /* ป้องกันการกดโดนลูกแบดแล้วกลายเป็นการเลือกข้อความ */
+    pointer-events: none; 
+}
+
+/* จัดกลุ่มเนื้อหาให้อยู่กลางหน้าจอ */
+.score-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* ปรับขนาดชื่อให้ใหญ่ขึ้นและอยู่กลาง */
+.team-label { 
+    font-size: 28px !important; /* ปรับขนาดชื่อตามต้องการ */
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+/* จัดวางตัวเลขคะแนน */
+.score-number-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ตัวเลขคะแนน */
+.score-num {
+    font-size: 130px; /* ขนาดตัวเลข */
+    font-weight: 900;
+    line-height: 1;
+}
+
+/* ปรับลูกแบดให้เป็นสีขาวและลอยอยู่ด้านข้าง (ไม่ดันตัวเลข) */
+.shuttle-white-absolute {
+    position: absolute;
+    right: -70px; /* วางไว้ด้านขวาของตัวเลข */
+    font-size: 45px;
+    visibility: hidden;
+    filter: brightness(0) invert(1); /* ทำให้เป็นสีขาวสด */
+    pointer-events: none;
+}
+
+/* ปรับปรุงสไตล์ Tag ใน style.css */
+.tag {
+    background: var(--dark);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    position: relative;
+    cursor: pointer;
+    border: 2px solid transparent;
+    /* ลดเวลา transition ลงเพื่อให้ดูตอบสนองไวขึ้นแต่ไม่กระพริบ */
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    display: flex;
+    align-items: center;
+}
+
+/* เมื่อถูกเลือก ให้เปลี่ยนสีนิ่งๆ */
+.tag.active-tag {
+    background: var(--primary) !important;
+    color: var(--dark) !important;
+    border-color: #000;
+    /* ไม่ใช้ transform: translateY เพื่อไม่ให้มีการขยับขึ้นลง */
+    box-shadow: none; 
+}
+
+/* เอฟเฟกต์ตอนกดให้ดูยุบลงเล็กน้อยพอให้รู้ว่ากดแล้ว */
+.tag:active {
+    transform: scale(0.98);
+}
