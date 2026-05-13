@@ -253,3 +253,27 @@ function updateHist() {
     html += `</div>`;
     list.innerHTML = html;
 }
+
+// --- ระบบล้างรายชื่อแบบ Custom Modal ---
+
+function showClearModal() {
+    const modal = document.getElementById('clearConfirmModal');
+    modal.style.display = 'flex';
+    // ป้องกันการเลื่อนหน้าจอเบื้องหลัง
+    document.body.style.overflow = 'hidden';
+}
+
+function hideClearModal() {
+    const modal = document.getElementById('clearConfirmModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+function executeClear() {
+    const pList = document.getElementById('pList');
+    if (pList) {
+        pList.value = ""; // ล้างข้อมูล
+    }
+    hideClearModal(); // ปิด Modal
+    pList.focus();    // เอาเคอร์เซอร์ไปวางพร้อมพิมพ์ต่อ
+}

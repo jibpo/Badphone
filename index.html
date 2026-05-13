@@ -11,7 +11,7 @@
 
 <div class="app-container">
     <section id="pagePlayers" class="page active">
-        <header><p>Let's play</p><h1>Manage Crew</h1></header>
+        <header><p>Let's play</p><h1>Badminton Match🔥</h1></header>
         <div class="card card-gradient">
             <div class="input-group">
                 <input type="text" id="gName" placeholder="ชื่อก๊วน...">
@@ -19,8 +19,28 @@
             </div>
             <div id="tags" class="tag-container"></div>
             <textarea id="pList" placeholder="ใส่ชื่อคนละบรรทัด..." rows="8"></textarea>
-            <button class="btn-black" onclick="startRandom()">Start Match 🚀</button>
         </div>
+<div style="display: flex; gap: 12px; margin-top: 15px;">
+    <button class="btn-black" onclick="showClearModal()" style="flex: 1; background: #f0f0f0; color: black; font-size: 14px !important; display: flex; align-items: center; justify-content: center; gap: 5px;">
+        ล้าง 🗑️
+    </button>
+    <button class="btn-black" onclick="startRandom()" style="flex: 2;">
+        Start Match 🚀
+    </button>
+</div>
+
+<div id="clearConfirmModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(4px);">
+    <div class="card" style="background:#FFF; border:4px solid #000; padding:30px; border-radius:25px; box-shadow:10px 10px 0px #000; width:100%; max-width:320px; text-align:center;">
+        <div style="font-size:45px; margin-bottom:10px;">🗑️</div>
+        <h2 style="margin:0 0 10px; font-weight:800; font-size:22px;">ล้างรายชื่อ?</h2>
+        <p style="margin-bottom:25px; font-size:14px; font-weight:600; color:#555;">คุณต้องการลบรายชื่อทั้งหมดในช่องพิมพ์ใช่หรือไม่?</p>
+        <div style="display:flex; gap:12px;">
+            <button class="btn-nav" onclick="hideClearModal()" style="flex:1; border-radius:15px; padding:12px;">ยกเลิก</button>
+            <button class="btn-nav" onclick="executeClear()" style="flex:1; background:#000; color:#FFF; border-radius:15px; padding:12px; font-weight:800;">ยืนยันล้าง</button>
+        </div>
+    </div>
+</div>
+
     </section>
 
     <section id="pageMatch" class="page">
@@ -51,7 +71,7 @@
 
 <nav class="bottom-nav">
     <a href="#" class="nav-item active" onclick="switchPage('pagePlayers', this)">
-        <span class="nav-icon">👥</span><span class="nav-text">CREW</span>
+        <span class="nav-icon">👥</span><span class="nav-text">PLAYER</span>
     </a>
     <a href="#" class="nav-item" onclick="switchPage('pageMatch', this)">
         <span class="nav-icon">🏸</span><span class="nav-text">MATCH</span>
