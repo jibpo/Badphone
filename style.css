@@ -95,7 +95,7 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
 .nav-text { font-size: 10px; font-weight: 700; }
 
 /* หน้าจอนับคะแนน (Scoreboard Overlay) แบบกึ่งกลางแท้ */
-#scoreOverlay { position: fixed; inset: 0; z-index: 2000; display: none; flex-direction: column; background: #000; }
+#scoreOverlay { position: fixed; inset: 0; z-index: 1000; display: none; flex-direction: column; background: #000; touch-action: manipulation; }
 .score-side { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; width: 100%; }
 .red-side { background: #FF3B30; border-bottom: 2px solid rgba(0,0,0,0.2); }
 .blue-side { background: #007AFF; }
@@ -110,14 +110,13 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
     z-index: 50; /* อยู่เหนือปุ่มกดซ่อนเร้น */
     pointer-events: none; /* เพื่อไม่ให้ขวางนิ้วเวลากดบวกแต้ม */
 }
-/* ชื่อทีมขนาดใหญ่เด่นชัด */
-.team-label { 
-    font-size: 26px !important; 
-    font-weight: 800; 
-    margin-bottom: 8px; 
-    text-align: center;
-    width: 100%;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+.team-names-overlay { 
+    position: absolute; 
+    top: 60px; /* เลื่อนลงมาให้พ้นแถบด้านบนของ iPhone */
+    color: rgba(255,255,255,0.9); 
+    font-size: 18px; /* ปรับให้เล็กลงตามที่ต้องการ */
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
 }
 .score-number-wrapper {
     position: relative;
@@ -125,7 +124,16 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
     align-items: center;
     justify-content: center;
 }
-.score-num { font-size: 180px; font-weight: 900; line-height: 0.9; text-shadow: 2px 4px 0px rgba(0,0,0,0.15); }
+.score-num { 
+    font-size: 38vh !important; /* ปรับให้ใหญ่เต็มตา (38% ของความสูงหน้าจอ) */
+    color: white; 
+    font-weight: 800; 
+    line-height: 0.8; 
+    margin: 0;
+    text-shadow: 2px 5px 15px rgba(0,0,0,0.2);
+    user-select: none; 
+    -webkit-user-select: none; 
+}
 
 /* ลูกแบดสีขาวลอยทางขวาของตัวเลข (ไม่ดันตำแหน่งข้อความ) */
 .shuttle-white-absolute {
@@ -142,11 +150,12 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
 .tap-area-plus { position: absolute; right: 0; top: 0; width: 65%; height: 100%; z-index: 20; }
 .btn-close-score { 
     position: absolute; 
-    top: 50px;       /* เพิ่มระยะห่างจากขอบบนลงมา (หลบแถบลาก Control Center ของ iPhone) */
-    right: 25px;     /* ขยับเข้ามาข้างในหน้าจออีกนิด */
+    top: 55px;       /* เพิ่มระยะห่างจากขอบบนลงมา (หลบแถบลาก Control Center ของ iPhone) */
+    right: 20px;     /* ขยับเข้ามาข้างในหน้าจออีกนิด */
     color: #fff; 
-    font-size: 26px; /* ขนาดกากบาทกำลังดี */
-    z-index: 4000; 
+    font-size: 28px; /* ขนาดกากบาทกำลังดี */
+    opacity: 0.8;
+    z-index: 1001; 
     cursor: pointer;
     
     /* เทคนิคขยายพื้นที่รับสัมผัสให้นิ้วจิ้มง่ายขึ้น */
