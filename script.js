@@ -127,10 +127,7 @@ function openScore() {
 function closeScore() { document.getElementById('scoreOverlay').style.display = 'none'; }
 
 function addPoint(t) {
-    if (window.navigator && window.navigator.vibrate) {
-        window.navigator.vibrate(20); // สั่น 1 ครั้งเมื่อได้แต้ม
-    }
-    
+    if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(10);
     if(t === 1) sc1++; else sc2++;
 
     if(sc1 === 20 && sc2 === 20 && !deuceDecided) {
@@ -141,10 +138,7 @@ function addPoint(t) {
 }
 
 function removePoint(t) {
-    if (window.navigator && window.navigator.vibrate) {
-        window.navigator.vibrate([15, 10, 15]); // สั่นสองจังหวะเมื่อลดแต้ม
-    }
-    
+    if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(10);
     if(t === 1) { if(sc1 > 0) sc1--; } else { if(sc2 > 0) sc2--; }
     checkWinner();
     upScore();
