@@ -95,7 +95,15 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
 .nav-text { font-size: 10px; font-weight: 700; }
 
 /* หน้าจอนับคะแนน (Scoreboard Overlay) แบบกึ่งกลางแท้ */
-#scoreOverlay { position: fixed; inset: 0; z-index: 2000; display: none; flex-direction: column; background: #000; }
+#scoreOverlay { 
+    position: fixed; 
+    inset: 0; 
+    z-index: 2000; 
+    display: none; 
+    flex-direction: column; 
+    background: #000; 
+    touch-action: manipulation; /* เพิ่มบรรทัดนี้เพื่อป้องกันการซูมบน iPhone */
+}
 .score-side { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; width: 100%; }
 .red-side { background: #FF3B30; border-bottom: 2px solid rgba(0,0,0,0.2); }
 .blue-side { background: #007AFF; }
@@ -131,8 +139,8 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
 /* ลูกแบดสีขาวลอยทางขวาของตัวเลข (ไม่ดันตำแหน่งข้อความ) */
 .shuttle-white-absolute {
     position: absolute;
-    right: -75px;
-    font-size: 45px;
+    right: -50px;
+    font-size: 40px;
     visibility: hidden;
     filter: brightness(0) invert(1);
     -webkit-filter: brightness(0) invert(1);

@@ -3,6 +3,7 @@ let sc1 = 0, sc2 = 0;
 let deuceDecided = false, isDeuceActive = false;
 let groupToDelete = null;
 let lastScorer = 0; // 0 = ไม่มี, 1 = แดง, 2 = น้ำเงิน
+let gameEnded = false; // เพิ่มตัวแปรนี้
 
 window.onload = loadGroups;
 
@@ -121,12 +122,14 @@ function openScore() {
     document.getElementById('deuceStatus').innerText = "";
     document.getElementById('deuceChoiceModal').style.display = 'none';
     document.getElementById('winnerModal').style.display = 'none';
+    gameEnded = false;
     upScore();
 }
 
 function closeScore() { document.getElementById('scoreOverlay').style.display = 'none'; }
 
 function addPoint(t) {
+    if (gameEnded) return;
     if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(10);
     if(t === 1) sc1++; else sc2++;
 
@@ -138,6 +141,7 @@ function addPoint(t) {
 }
 
 function removePoint(t) {
+    if (gameEnded) return;
     if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(10);
     if(t === 1) { if(sc1 > 0) sc1--; } else { if(sc2 > 0) sc2--; }
     checkWinner();
@@ -170,6 +174,7 @@ function forceEndGame() {
 }
 
 function showWinner(name) {
+    gameEnded = true;
     document.getElementById('winnerText').innerText = name;
     document.getElementById('winnerModal').style.display = 'block';
 }
