@@ -120,9 +120,9 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
 }
 .team-names-overlay { 
     position: absolute; 
-    top: 60px; /* ขยับลงมาให้พ้นแถบด้านบนของ iPhone */
+    top: 75px;      /* ขยับลงมาเล็กน้อยเพื่อให้ไม่ทับกับปุ่มปิดที่เลื่อนขึ้นไป */
     color: rgba(255,255,255,0.9); 
-    font-size: 18px; /* ปรับขนาดให้เล็กลงตามต้องการ */
+    font-size: 18px; 
     font-weight: 700;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
 }
@@ -133,22 +133,22 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
     justify-content: center;
 }
 .score-num { 
-    font-size: 38vh !important; /* ใหญ่ขึ้นเป็น 38% ของความสูงหน้าจอ */
+    font-size: 30vh !important; /* ปรับขนาดให้พอดี ไม่ล้นจอแนวตั้งของ iPhone */
     color: white; 
     font-weight: 800; 
     line-height: 0.8; 
     margin: 0;
-    text-shadow: 2px 5px 15px rgba(0,0,0,0.2); /* เพิ่มเงาให้ดูคมชัด */
+    text-shadow: 2px 5px 15px rgba(0,0,0,0.2);
     user-select: none; 
     -webkit-user-select: none; 
 }
 
 .shuttle-white-absolute {
     position: absolute;
-    right: -85px; /* วางไว้ฝั่งขวาของตัวเลข */
-    font-size: 55px;
+    right: -60px;    /* ขยับเข้ามาจากเดิม -85px เพื่อไม่ให้ตกขอบจอ */
+    font-size: 45px; /* ลดขนาดลงเล็กน้อยให้สมดุลกับตัวเลขใหม่ */
     visibility: hidden;
-    filter: brightness(0) invert(1); /* ย้อมเป็นสีขาวล้วน */
+    filter: brightness(0) invert(1);
     -webkit-filter: brightness(0) invert(1);
 }
 
@@ -157,18 +157,18 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
 .tap-area-plus { position: absolute; right: 0; top: 0; width: 65%; height: 100%; z-index: 20; }
 .btn-close-score { 
     position: absolute; 
-    top: 55px; /* เลื่อนลงมาหลบแถบ Control Center */
-    right: 20px; 
+    top: 45px;       /* ขยับให้สูงขึ้นกว่าเดิม (เดิม 55px) เพื่อให้แยกจากชื่อทีม */
+    right: 15px;     /* ขยับเข้าชิดขอบอีกนิด */
     color: #fff; 
-    font-size: 28px; 
+    font-size: 24px; /* ปรับขนาดไอคอนให้เล็กลงเล็กน้อยเพื่อให้ดูสะอาดตา */
     opacity: 0.8;
     z-index: 1001; 
     cursor: pointer;
-    padding: 15px; /* ขยายพื้นที่สัมผัสให้กดง่ายขึ้น */
+    padding: 10px;   
     background: rgba(0, 0, 0, 0.2); 
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
