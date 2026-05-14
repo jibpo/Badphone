@@ -140,7 +140,34 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
 /* พื้นที่สัมผัสสำหรับปุ่มกดแบ่งหน้าจอ */
 .tap-area-minus { position: absolute; left: 0; top: 0; width: 35%; height: 100%; z-index: 20; }
 .tap-area-plus { position: absolute; right: 0; top: 0; width: 65%; height: 100%; z-index: 20; }
-.btn-close-score { position: absolute; top: 15px; right: 15px; color: #fff; font-size: 28px; z-index: 4000; cursor: pointer; padding: 5px; }
+.btn-close-score { 
+    position: absolute; 
+    top: 50px;       /* เพิ่มระยะห่างจากขอบบนลงมา (หลบแถบลาก Control Center ของ iPhone) */
+    right: 25px;     /* ขยับเข้ามาข้างในหน้าจออีกนิด */
+    color: #fff; 
+    font-size: 26px; /* ขนาดกากบาทกำลังดี */
+    z-index: 4000; 
+    cursor: pointer;
+    
+    /* เทคนิคขยายพื้นที่รับสัมผัสให้นิ้วจิ้มง่ายขึ้น */
+    padding: 15px;   
+    background: rgba(0, 0, 0, 0.2); /* เพิ่มพื้นหลังสีดำจางๆ เป็นวงเพื่อช่วยนำสายตา */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* ป้องกันเวลาลากนิ้วแล้วเผลอไปขยับปุ่ม */
+    touch-action: manipulation; 
+}
+
+/* เอฟเฟกต์ตอนเอานิ้วกดปุ่มปิดให้ดูยุบลงนิดนึง */
+.btn-close-score:active {
+    transform: scale(0.9);
+    background: rgba(0, 0, 0, 0.4);
+}
 
 #deuceStatus { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2500; color: #fff; font-size: 32px; font-weight: 900; text-shadow: 3px 3px 0px #000; pointer-events: none; }
 .modal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; border: 3px solid #000; border-radius: 20px; padding: 20px; width: 85%; max-width: 300px; text-align: center; box-shadow: 6px 6px 0px #000; z-index: 3000; display: none; }
