@@ -125,7 +125,7 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
 
 /* 3. ขยายตัวเลขคะแนนให้ใหญ่ยักษ์สะใจ มองเห็นชัดจากนอกคอร์ท */
 .score-num { 
-    font-size: 240px !important; /* เพิ่มจาก 180px เป็น 240px ใหญ่เต็มตาแน่นอน */
+    font-size: 32vh !important; /* เพิ่มจาก 180px เป็น 240px ใหญ่เต็มตาแน่นอน */
     font-weight: 900; 
     line-height: 0.8; /* ดึงขอบตัวเลขให้กระชับ เพื่อไม่ให้หลุดหน้าจอแนวตั้ง */
     text-shadow: 2px 5px 0px rgba(0,0,0,0.15); 
