@@ -1,28 +1,28 @@
-/* ใส่เพิ่มไว้บนสุดของไฟล์ style.css */
 body {
-    overscroll-behavior-y: contain; /* ป้องกันการลากลงเพื่อรีเฟรช */
-    -webkit-tap-highlight-color: transparent; /* ลบสีฟ้าเวลาแตะปุ่มบนมือถือ */
+    overscroll-behavior-y: contain;
+    -webkit-tap-highlight-color: transparent;
 }
 
 * {
-    -webkit-user-select: none; /* ป้องกันการคลุมดำเลือกตัวอักษร */
+    -webkit-user-select: none;
     user-select: none;
-    -webkit-touch-callout: none; /* ป้องกันเมนูเด้งเวลาค้างที่รูปหรือลิงก์ */
+    -webkit-touch-callout: none;
+    box-sizing: border-box;
+    font-family: 'Mali', sans-serif !important;
 }
 
 input, textarea {
-    -webkit-user-select: text; /* อนุญาตให้พิมพ์ในช่องเหล่านี้ได้ */
+    -webkit-user-select: text;
     user-select: text;
 }
 
-/* ใส่เพิ่มในส่วน Scoreboard */
 @keyframes scoreBounce {
     0% { transform: scale(1); }
-    50% { transform: scale(1.3); color: var(--primary); }
+    50% { transform: scale(1.2); color: var(--primary); }
     100% { transform: scale(1); }
 }
 .bounce {
-    animation: scoreBounce 0.3s ease-out;
+    animation: scoreBounce 0.25s ease-out;
 }
 
 :root {
@@ -34,10 +34,7 @@ input, textarea {
     --shadow: 4px 4px 0px #000;
 }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Mali', sans-serif !important; }
-
 body { background: var(--bg); margin: 0; overflow-x: hidden; min-height: 100vh; }
-
 .app-container { padding: 20px 15px 100px; max-width: 480px; margin: 0 auto; }
 
 .page { display: none; }
@@ -56,14 +53,32 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
 
 .btn-add { background: var(--dark); color: #fff; border: none; border-radius: 12px; width: 48px; height: 48px; font-size: 24px; }
 
+/* Tag ก๊วนปกติ */
 .tag-container { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
-.tag { background: var(--dark); color: #fff; padding: 6px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; position: relative; }
+.tag { 
+    background: var(--dark); 
+    color: #fff; 
+    padding: 8px 16px; 
+    border-radius: 12px; 
+    font-size: 13px; 
+    font-weight: 700; 
+    position: relative; 
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+/* Tag ก๊วนที่ถูกเลือก - นิ่ง ทันใจ ไม่กระพริบ */
+.tag.active-tag {
+    background: var(--primary) !important;
+    color: var(--dark) !important;
+    border-color: #000 !important;
+}
 .btn-del-tag { position: absolute; top: -8px; right: -8px; background: #FF3B30; color: #fff; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; border: 1px solid #fff; }
 
 .btn-black { background: var(--dark); color: #fff; border: none; border-radius: 15px; padding: 15px; width: 100%; font-size: 16px; font-weight: 800; }
 .btn-black:active { transform: translate(2px, 2px); }
 
-/* Match */
+/* Match layout */
 .match-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; margin: 15px 0; }
 .team-box { background: #fff; border: 2px solid #000; border-radius: 15px; padding: 12px; text-align: center; }
 .name { display: block; font-weight: 700; font-size: 14px; }
@@ -72,117 +87,67 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
 .btn-nav { background: #fff; border: 2px solid #000; border-radius: 12px; padding: 10px; font-weight: 700; }
 .btn-next { background: #000; color: #fff; }
 
-/* Nav */
+/* Bottom Nav Menu */
 .bottom-nav { position: fixed; bottom: 15px; left: 15px; right: 15px; background: var(--dark); border-radius: 20px; height: 65px; display: flex; align-items: center; justify-content: space-around; max-width: 450px; margin: 0 auto; z-index: 1000; }
 .nav-item { text-decoration: none; display: flex; flex-direction: column; align-items: center; color: #FFFFFF; transition: 0.3s; }
 .nav-item.active { color: var(--primary); }
 .nav-icon { font-size: 20px; }
 .nav-text { font-size: 10px; font-weight: 700; }
 
-/* Scoreboard */
+/* หน้าจอนับคะแนน (Scoreboard Overlay) แบบกึ่งกลางแท้ */
 #scoreOverlay { position: fixed; inset: 0; z-index: 2000; display: none; flex-direction: column; background: #000; }
-.score-side { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; }
-.red-side { background: #FF3B30; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.score-side { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; width: 100%; }
+.red-side { background: #FF3B30; border-bottom: 2px solid rgba(0,0,0,0.2); }
 .blue-side { background: #007AFF; }
-.score-num { font-size: 110px; font-weight: 900; }
-.team-label { font-size: 22px; font-weight: 800; opacity: 0.8; margin-bottom: 10px; text-transform: uppercase; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
 
-.tap-area-minus { position: absolute; left: 0; top: 0; width: 40%; height: 100%; z-index: 10; }
-.tap-area-plus { position: absolute; right: 0; top: 0; width: 60%; height: 100%; z-index: 10; }
-.btn-close-score { position: absolute; top: 15px; right: 15px; color: #fff; font-size: 24px; z-index: 4000; }
-
-#deuceStatus { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2500; color: #fff; font-size: 32px; font-weight: 900; text-shadow: 3px 3px 0px #000; pointer-events: none; }
-.modal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; border: 3px solid #000; border-radius: 20px; padding: 20px; width: 85%; max-width: 300px; text-align: center; box-shadow: 6px 6px 0px #000; z-index: 3000; display: none; }
-
-/* Stats */
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-.stat-card { background: #fff; border: 2px solid #000; border-radius: 12px; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
-.stat-count { background: var(--primary); padding: 2px 8px; border-radius: 8px; font-weight: 800; font-size: 12px; }
-
-#confirmModal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
-
-.shuttle-white {
-    font-size: 50px; /* ปรับขนาดตามชอบ */
-    visibility: hidden;
-    line-height: 1;
-    /* เทคนิคย้อมสี Emoji ให้เป็นสีขาวสด */
-    filter: brightness(0) invert(1); 
-    -webkit-filter: brightness(0) invert(1);
-    
-    /* ป้องกันการกดโดนลูกแบดแล้วกลายเป็นการเลือกข้อความ */
-    pointer-events: none; 
-}
-
-/* จัดกลุ่มเนื้อหาให้อยู่กลางหน้าจอ */
+/* ตัวคอนเทนเนอร์ให้อยู่กลางหน้าจอ */
 .score-content-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
+    z-index: 50; /* อยู่เหนือปุ่มกดซ่อนเร้น */
+    pointer-events: none; /* เพื่อไม่ให้ขวางนิ้วเวลากดบวกแต้ม */
 }
-
-/* ปรับขนาดชื่อให้ใหญ่ขึ้นและอยู่กลาง */
+/* ชื่อทีมขนาดใหญ่เด่นชัด */
 .team-label { 
-    font-size: 28px !important; /* ปรับขนาดชื่อตามต้องการ */
-    font-weight: 800;
-    margin-bottom: 10px;
+    font-size: 26px !important; 
+    font-weight: 800; 
+    margin-bottom: 8px; 
     text-align: center;
     width: 100%;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
-
-/* จัดวางตัวเลขคะแนน */
 .score-number-wrapper {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+.score-num { font-size: 130px; font-weight: 900; line-height: 1; text-shadow: 2px 4px 0px rgba(0,0,0,0.1); }
 
-/* ตัวเลขคะแนน */
-.score-num {
-    font-size: 130px; /* ขนาดตัวเลข */
-    font-weight: 900;
-    line-height: 1;
-}
-
-/* ปรับลูกแบดให้เป็นสีขาวและลอยอยู่ด้านข้าง (ไม่ดันตัวเลข) */
+/* ลูกแบดสีขาวลอยทางขวาของตัวเลข (ไม่ดันตำแหน่งข้อความ) */
 .shuttle-white-absolute {
     position: absolute;
-    right: -70px; /* วางไว้ด้านขวาของตัวเลข */
+    right: -75px;
     font-size: 45px;
     visibility: hidden;
-    filter: brightness(0) invert(1); /* ทำให้เป็นสีขาวสด */
-    pointer-events: none;
+    filter: brightness(0) invert(1);
+    -webkit-filter: brightness(0) invert(1);
 }
 
-/* ปรับปรุงสไตล์ Tag ใน style.css */
-.tag {
-    background: var(--dark);
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 12px;
-    font-size: 13px;
-    font-weight: 700;
-    position: relative;
-    cursor: pointer;
-    border: 2px solid transparent;
-    /* ลดเวลา transition ลงเพื่อให้ดูตอบสนองไวขึ้นแต่ไม่กระพริบ */
-    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-    display: flex;
-    align-items: center;
-}
+/* พื้นที่สัมผัสสำหรับปุ่มกดแบ่งหน้าจอ */
+.tap-area-minus { position: absolute; left: 0; top: 0; width: 35%; height: 100%; z-index: 20; }
+.tap-area-plus { position: absolute; right: 0; top: 0; width: 65%; height: 100%; z-index: 20; }
+.btn-close-score { position: absolute; top: 15px; right: 15px; color: #fff; font-size: 28px; z-index: 4000; cursor: pointer; padding: 5px; }
 
-/* เมื่อถูกเลือก ให้เปลี่ยนสีนิ่งๆ */
-.tag.active-tag {
-    background: var(--primary) !important;
-    color: var(--dark) !important;
-    border-color: #000;
-    /* ไม่ใช้ transform: translateY เพื่อไม่ให้มีการขยับขึ้นลง */
-    box-shadow: none; 
-}
+#deuceStatus { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2500; color: #fff; font-size: 32px; font-weight: 900; text-shadow: 3px 3px 0px #000; pointer-events: none; }
+.modal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; border: 3px solid #000; border-radius: 20px; padding: 20px; width: 85%; max-width: 300px; text-align: center; box-shadow: 6px 6px 0px #000; z-index: 3000; display: none; }
 
-/* เอฟเฟกต์ตอนกดให้ดูยุบลงเล็กน้อยพอให้รู้ว่ากดแล้ว */
-.tag:active {
-    transform: scale(0.98);
-}
+/* หน้าบันทึกสถิติ */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.stat-card { background: #fff; border: 2px solid #000; border-radius: 12px; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; }
+.stat-count { background: var(--primary); padding: 2px 10px; border-radius: 8px; font-weight: 800; font-size: 12px; border: 1px solid #000; }
+
+#confirmModal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
