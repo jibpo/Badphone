@@ -125,13 +125,13 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
     align-items: center;
     justify-content: center;
 }
-.score-num { font-size: 130px; font-weight: 900; line-height: 1; text-shadow: 2px 4px 0px rgba(0,0,0,0.1); }
+.score-num { font-size: 180px; font-weight: 900; line-height: 0.9; text-shadow: 2px 4px 0px rgba(0,0,0,0.15); }
 
 /* ลูกแบดสีขาวลอยทางขวาของตัวเลข (ไม่ดันตำแหน่งข้อความ) */
 .shuttle-white-absolute {
     position: absolute;
-    right: -75px;
-    font-size: 45px;
+    right: -85px;
+    font-size: 55px;
     visibility: hidden;
     filter: brightness(0) invert(1);
     -webkit-filter: brightness(0) invert(1);
