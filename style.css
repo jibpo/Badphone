@@ -100,42 +100,38 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
 .red-side { background: #FF3B30; border-bottom: 2px solid rgba(0,0,0,0.2); }
 .blue-side { background: #007AFF; }
 
-/* 1. จัดคอนเทนเนอร์ให้ชื่อกระชับขึ้นและอยู่กึ่งกลาง */
+/* ตัวคอนเทนเนอร์ให้อยู่กลางหน้าจอ */
 .score-content-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    z-index: 50;
-    pointer-events: none;
-    padding: 0 20px; /* เพิ่มพื้นที่ด้านข้างป้องกันตัวหนังสือล้นจอ */
+    z-index: 50; /* อยู่เหนือปุ่มกดซ่อนเร้น */
+    pointer-events: none; /* เพื่อไม่ให้ขวางนิ้วเวลากดบวกแต้ม */
 }
-
-/* 2. ปรับขนาดชื่อผู้เล่นให้เล็กลงมาหน่อยเพื่อหลบทางให้คะแนน */
+/* ชื่อทีมขนาดใหญ่เด่นชัด */
 .team-label { 
-    font-size: 18px !important; /* ปรับลดลงจาก 26px เพื่อความเหมาะสม */
-    font-weight: 700; 
-    margin-bottom: -10px; /* ขยับชื่อให้เข้ามาใกล้ตัวเลขคะแนนขนาดใหญ่ */
+    font-size: 26px !important; 
+    font-weight: 800; 
+    margin-bottom: 8px; 
     text-align: center;
     width: 100%;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-    opacity: 0.9; /* ปรับให้ชื่อจางลงเล็กน้อยเพื่อให้คะแนนดูเด่นที่สุด */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
-
-/* 3. ขยายตัวเลขคะแนนให้ใหญ่ยักษ์สะใจ มองเห็นชัดจากนอกคอร์ท */
-.score-num { 
-    font-size: 240px !important; /* เพิ่มจาก 180px เป็น 240px ใหญ่เต็มตาแน่นอน */
-    font-weight: 900; 
-    line-height: 0.8; /* ดึงขอบตัวเลขให้กระชับ เพื่อไม่ให้หลุดหน้าจอแนวตั้ง */
-    text-shadow: 2px 5px 0px rgba(0,0,0,0.15); 
+.score-number-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+.score-num { font-size: 180px; font-weight: 900; line-height: 0.9; text-shadow: 2px 4px 0px rgba(0,0,0,0.15); }
 
-/* 4. ปรับระยะห่างลูกแบดสีขาวให้ออกไปอยู่ขอบข้างเลขใหญ่ */
+/* ลูกแบดสีขาวลอยทางขวาของตัวเลข (ไม่ดันตำแหน่งข้อความ) */
 .shuttle-white-absolute {
     position: absolute;
-    right: -70px; /* วางไว้ตำแหน่งขวาสุดของตัวเลข */
-    font-size: 50px; /* ขนาดลูกแบดกำลังสวยสมดุลกับตัวเลขยักษ์ */
+    right: -85px;
+    font-size: 55px;
     visibility: hidden;
     filter: brightness(0) invert(1);
     -webkit-filter: brightness(0) invert(1);
