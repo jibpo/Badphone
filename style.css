@@ -109,12 +109,13 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
     width: 100%;
     z-index: 50; /* อยู่เหนือปุ่มกดซ่อนเร้น */
     pointer-events: none; /* เพื่อไม่ให้ขวางนิ้วเวลากดบวกแต้ม */
+    padding: 0 20px;
 }
 /* ชื่อทีมขนาดใหญ่เด่นชัด */
 .team-label { 
-    font-size: 26px !important; 
+    font-size: 20px !important; 
     font-weight: 800; 
-    margin-bottom: 8px; 
+    margin-bottom: -10px; 
     text-align: center;
     width: 100%;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
@@ -125,7 +126,7 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
     align-items: center;
     justify-content: center;
 }
-.score-num { font-size: 300px; font-weight: 900; line-height: 1; text-shadow: 2px 4px 0px rgba(0,0,0,0.1); }
+.score-num { font-size: 200px; font-weight: 900; line-height: 1; text-shadow: 2px 4px 0px rgba(0,0,0,0.1); }
 
 /* ลูกแบดสีขาวลอยทางขวาของตัวเลข (ไม่ดันตำแหน่งข้อความ) */
 .shuttle-white-absolute {
