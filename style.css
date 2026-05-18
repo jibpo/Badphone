@@ -102,48 +102,50 @@ input, textarea { width: 100%; border: var(--border); border-radius: 12px; paddi
     display: none; 
     flex-direction: column; 
     background: #000; 
-    touch-action: manipulation; /* เพิ่มบรรทัดนี้เพื่อป้องกันการซูมบน iPhone */
+    touch-action: manipulation;
 }
 .score-side { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; color: #fff; width: 100%; }
 .red-side { background: #FF3B30; border-bottom: 2px solid rgba(0,0,0,0.2); }
 .blue-side { background: #007AFF; }
 
-/* ตัวคอนเทนเนอร์ให้อยู่กลางหน้าจอ */
+/* คอนเทนเนอร์จัดเรียงทุกอย่างเป็นแนวตั้งกึ่งกลาง */
 .score-content-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    z-index: 50; /* อยู่เหนือปุ่มกดซ่อนเร้น */
-    pointer-events: none; /* เพื่อไม่ให้ขวางนิ้วเวลากดบวกแต้ม */
-    padding: 0 20px;
+    z-index: 50; 
+    pointer-events: none; 
+    padding: 0 10px;
 }
-/* ชื่อทีมขนาดใหญ่เด่นชัด */
+
+/* ชื่อทีม/รายชื่อผู้เล่น ขนาดใหญ่ เด่นชัด ตัวอักษรหนาและเว้นระยะตามรูปแบบภาพ */
 .team-label { 
-    font-size: 20px !important; 
+    font-size: 40px !important; 
     font-weight: 800; 
-    margin-bottom: -10px; 
+    margin-bottom: 5px; 
     text-align: center;
     width: 100%;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    letter-spacing: 1px;
 }
-.score-number-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.score-num { font-size: 200px; font-weight: 900; line-height: 1; text-shadow: 2px 4px 0px rgba(0,0,0,0.1); }
 
-/* ลูกแบดสีขาวลอยทางขวาของตัวเลข (ไม่ดันตำแหน่งข้อความ) */
-.shuttle-white-absolute {
-    position: absolute;
-    right: -50px;
-    font-size: 40px;
+/* ลูกแบดมินตันสีขาวอยู่ด้านบนตัวเลข (ไม่ดันตัวเลขหลุดขอบ และอยู่กลางแถวเสมอเมื่อแต้มเป็นสองหลัก) */
+.shuttle-white-top {
+    font-size: 32px;
+    margin-top: 5px;
+    margin-bottom: -15px; /* ดึงตัวเลขขึ้นมาให้ชิดลูกแบดตามต้นฉบับ */
     visibility: hidden;
     filter: brightness(0) invert(1);
     -webkit-filter: brightness(0) invert(1);
+    display: inline-block;
+}
+
+/* ตัวเลขแต้มขนาดใหญ่เบิ้ม เต็มหน้าจอ */
+.score-num { 
+    font-size: 190px; 
+    font-weight: 900; 
+    line-height: 1.1; 
 }
 
 /* พื้นที่สัมผัสสำหรับปุ่มกดแบ่งหน้าจอ */
