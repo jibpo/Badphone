@@ -4,6 +4,8 @@ let deuceDecided = false, isDeuceActive = false;
 let groupToDelete = null;
 let lastScorer = 0; // 0 = ไม่มี, 1 = แดง, 2 = น้ำเงิน
 let gameEnded = false; // เพิ่มตัวแปรนี้
+let fixedEightMatches = []; // เก็บตารางแข่งล่วงหน้ากรณีมี 8 คนพอดี
+let playerQueue = [];      // คิวล็อกลำดับคนนั่งรอจริง
 
 window.onload = loadGroups;
 
@@ -66,17 +68,42 @@ function closeConfirm() { document.getElementById('confirmModal').style.display 
 
 // --- ระบบสุ่มรอบจับคู่ ---
 function startRandom() {
-    const names = document.getElementById('pList').value.trim().split('\n').filter(x => x.trim());
-    if(names.length < 4) return alert("ใส่ชื่ออย่างน้อย 4 คน");
+    const names = document.getElementById('pList').value.trim().split('\n').filter(x => x.trim()); //
+    if(names.length < 4) return alert("ใส่ชื่ออย่างน้อย 4 คน"); //
     
-    players = names.map(x => ({ name: x.trim(), played: 0 }));
-    history = []; 
-    idx = -1;
+    players = names.map(x => ({ name: x.trim(), played: 0 })); //
+    history = [];  //
+    idx = -1; //
+    fixedEightMatches = []; 
     
-    next(); 
-    switchPage('pageMatch', document.querySelectorAll('.nav-item')[1]);
-    document.getElementById('noMatch').style.display = 'none';
-    document.getElementById('matchDisplay').style.display = 'block';
+    // ตั้งต้นคิวผู้เล่น (สุ่มลำดับแรกเข้าตอนเริ่มก๊วนครั้งแรกเพื่อความสนุกและยุติธรรม)
+    let initialShuffled = [...players].sort(() => Math.random() - 0.5);
+    playerQueue = initialShuffled.map(p => p.name);
+    
+    // หากมี 8 คนพอดี จะใช้สูตรล็อกเซตสลับฟันปลาพบกันหมด 6 แมตช์ตามที่คุณต้องการ
+    if (players.length === 8) {
+        generateFixedEightPattern();
+    }
+    
+    next();  //
+    switchPage('pageMatch', document.querySelectorAll('.nav-item')[1]); //
+    document.getElementById('noMatch').style.display = 'none'; //
+    document.getElementById('matchDisplay').style.display = 'block'; //
+}
+
+function generateFixedEightPattern() {
+    let shuffled = [...players].sort(() => Math.random() - 0.5);
+    let setA = shuffled.slice(0, 4).map(p => p.name);
+    let setB = shuffled.slice(4, 8).map(p => p.name);
+    
+    fixedEightMatches = [
+        [setA[0], setA[1], setA[2], setA[3]], // แมตช์ 1: เซต A เล่น (เซต B พักพร้อมกัน 4 คน)
+        [setB[0], setB[1], setB[2], setB[3]], // แมตช์ 2: เซต B เล่น (เซต A พักพร้อมกัน 4 คน)
+        [setA[0], setA[2], setA[1], setA[3]], // แมตช์ 3: เซต A สลับคู่ขาแบบที่ 2
+        [setB[0], setB[2], setB[1], setB[3]], // แมตช์ 4: เซต B สลับคู่ขาแบบที่ 2
+        [setA[0], setA[3], setA[1], setA[2]], // แมตช์ 5: เซต A สลับคู่ขาแบบที่ 3
+        [setB[0], setB[3], setB[1], setB[2]]  // แมตช์ 6: เซต B สลับคู่ขาแบบที่ 3
+    ];
 }
 
 function next() {
@@ -84,17 +111,79 @@ function next() {
         idx++; 
         render(); 
     } else {
-        let sorted = [...players].sort((a,b) => (a.played - b.played) || (Math.random() - 0.5));
-        let sel = sorted.slice(0, 4).sort(() => Math.random() - 0.5);
-        
-        sel.forEach(s => {
-            let p = players.find(player => player.name === s.name);
-            if (p) p.played++;
-        });
+        let sel = [];
 
+        // CASE 1: คนครบ 8 คนพอดี และยังแข่งอยู่ใน 6 แมตช์แรก (ใช้ตารางล็อกสลับเซต)
+        if (players.length === 8 && history.length < fixedEightMatches.length) {
+            sel = fixedEightMatches[history.length];
+            
+            sel.forEach(name => {
+                let p = players.find(player => player.name === name);
+                if (p) p.played++;
+            });
+        } 
+        // CASE 2: กรณีคนไม่ครบ 8 คน (หรือเล่นรอบทั่วไปยาวๆ)
+        else {
+            // 1. ค้นหาหาคนที่เพิ่งเล่นติดต่อกันมาแล้ว 2 เกมล่าสุด เพื่อบังคับให้ไปพักท้ายแถวชั่วคราว
+            let consecutivePlayers = [];
+            if (history.length >= 2) {
+                let lastMatch = history[history.length - 1].p;
+                let prevMatch = history[history.length - 2].p;
+                players.forEach(pl => {
+                    if (lastMatch.includes(pl.name) && prevMatch.includes(pl.name)) {
+                        consecutivePlayers.push(pl.name);
+                    }
+                });
+            }
+
+            // จัดระเบียบลำดับคิว: เอาคนเล่น 2 นัดติด ย้ายไปต่อท้ายแถวสุดแบบเคร่งครัด (ถ้าคนในก๊วนมีมากกว่า 4 คน)
+            let finalQueue = [...playerQueue];
+            if (players.length > 4 && consecutivePlayers.length > 0) {
+                // ดึงคนเหนื่อยออกจากคิวชั่วคราว แล้วเอาไปแปะไว้ท้ายสุดของแถวรอ
+                finalQueue = finalQueue.filter(p => !consecutivePlayers.includes(p));
+                finalQueue.push(...consecutivePlayers);
+                playerQueue = [...finalQueue]; // อัปเดตคิวหลักให้ถูกต้องตามนี้ด้วย
+            }
+
+            // 2. ดึง 4 คนแรกที่อยู่ "หัวคิว" ณ วินาทีนั้นออกมาเล่นทันที (ห้ามเปลี่ยนคน ห้ามดึงคนลำดับ 5,6,7 มาแทน)
+            let chosenFour = playerQueue.slice(0, 4);
+            
+            // 3. เอาเฉพาะ 4 คนนี้ มาสุ่มไขว้ฝั่งหาคู่ขาที่ไม่ซ้ำกับแมตช์ที่แล้ว
+            let bestLayout = [...chosenFour]; // ค่าตั้งต้น
+            if (history.length > 0) {
+                let lastMatch = history[history.length - 1].p; // [ทีมA_1, ทีมA_2, ทีมB_1, ทีมB_2]
+                
+                // วนลูปหาการจัดวางตำแหน่งฝั่งใน 4 คนเดิม เพื่อไม่ให้คู่ขาซ้ำแมตช์ที่แล้วเป๊ะๆ
+                for (let i = 0; i < 20; i++) {
+                    let testLayout = [...chosenFour].sort(() => Math.random() - 0.5);
+                    
+                    let isSamePair1 = (lastMatch[0] === testLayout[0] && lastMatch[1] === testLayout[1]) || (lastMatch[0] === testLayout[1] && lastMatch[1] === testLayout[0]);
+                    let isSamePair2 = (lastMatch[2] === testLayout[2] && lastMatch[3] === testLayout[3]) || (lastMatch[2] === testLayout[3] && lastMatch[3] === testLayout[2]);
+                    
+                    if (!isSamePair1 && !isSamePair2) {
+                        bestLayout = testLayout;
+                        break; 
+                    }
+                }
+            }
+            
+            sel = bestLayout;
+
+            // 4. จัดคิวสำหรับแมตช์ถัดไป: ดึง 4 คนที่ได้เล่นรอบนี้ออกจากหัวคิว แล้วส่งไปต่อ "ท้ายแถวสุด" ของจริง
+            playerQueue = playerQueue.filter(p => !sel.includes(p));
+            playerQueue.push(...sel);
+            
+            // อัปเดตสถิติจำนวนครั้งที่เล่นสะสม
+            sel.forEach(name => {
+                let p = players.find(player => player.name === name);
+                if (p) p.played++;
+            });
+        }
+
+        // บันทึกประวัติและแสดงผลหน้าจอ (ฟังก์ชันเดิมทั้งหมดอยู่ครบ)
         history.push({ 
             r: history.length + 1, 
-            p: sel.map(s => s.name) 
+            p: sel 
         });
         
         idx = history.length - 1; 
